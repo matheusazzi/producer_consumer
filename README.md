@@ -1,20 +1,24 @@
 # ProducerConsumer
 
-**TODO: Add description**
+#### TODO
+- [ ] Add a limit to beers list
+- [ ] Improve beers list print
 
-## Installation
+### Dependencies
+To run this project you must have [Elixir](http://elixir-lang.org/install.html) and [Mix](http://elixir-lang.org/getting-started/mix-otp/introduction-to-mix.html) installed on your machine.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+- Elixir 1.2 or above
 
-  1. Add producer_consumer to your list of dependencies in `mix.exs`:
+### Running
 
-        def deps do
-          [{:producer_consumer, "~> 0.0.1"}]
-        end
+You can run Elixir’s interactive shell including Mix.
 
-  2. Ensure producer_consumer is started before your application:
+```bash
+iex -S mix
+```
 
-        def application do
-          [applications: [:producer_consumer]]
-        end
+Then to start you need to pass a number of producers and consumers:
 
+```elixir
+Manager.start(3,4) # 3 producers / 4 consumers
+```

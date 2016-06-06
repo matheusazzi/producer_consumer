@@ -4,13 +4,14 @@ defmodule Consumer do
   end
 
   defp consume(manager_pid) do
-    IO.puts "[C] Comsumidor #{inspect self} disponível."
+    IO.puts "[C] Consumidor #{inspect self} está disponível."
     send(manager_pid, {:request, self})
 
     receive do
-      {:beer, beer} ->
-        IO.puts "[C] Comsumidor #{inspect self} está consumindo cerveja #{beer}."
-        :timer.sleep(beer * 1000)
+      {:beer, beer, producer_pid} ->
+        IO.puts "[C] Consumidor #{inspect self} consumindo cerveja ##{beer} do Produtor #{inspect producer_pid}."
+        :timer.sleep(beer)
+        IO.puts "[C] Consumidor #{inspect self} consumiu cerveja."
         consume(manager_pid)
     end
   end

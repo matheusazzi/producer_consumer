@@ -5,15 +5,15 @@ defmodule Producer do
 
   defp produce(manager_pid) do
     beer = make_beer
-    send(manager_pid, {:beer, self, beer})
+    send(manager_pid, {:beer, beer, self})
     produce(manager_pid)
   end
 
   defp make_beer do
-    beer = :rand.uniform(3000)
+    beer = round(:rand.uniform * 1000) + 1000
     IO.puts "[P] Produtor #{inspect self} está fazendo cerveja."
     :timer.sleep(beer)
-    IO.puts "[P] Produtor #{inspect self} terminou uma cerveja (#{beer})."
+    IO.puts "[P] Produtor #{inspect self} terminou uma cerveja (##{beer})."
     beer
   end
 end
