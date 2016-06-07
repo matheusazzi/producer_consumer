@@ -44,8 +44,7 @@ defmodule Manager do
   end
 
   defp print_beers_list(beers) do
-    IO.inspect({:beers, beers}, char_lists: :as_lists)
+    printable_list = Enum.map(beers, fn(beer) -> elem(beer, 1) end)
+    IO.puts ['Cervejas: ', inspect(printable_list, char_lists: :as_lists)]
   end
 end
-
-# Manager.start(1, 1)

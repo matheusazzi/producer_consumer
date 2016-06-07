@@ -9,7 +9,6 @@ You can have multiple Producers and Consumers running, you must ensure that all 
 #### TODO
 - [ ] Add a limit to beers list (buffer)
 - [ ] Make producers stop to make beers if list is full
-- [ ] Improve beers list print/log
 
 ### Dependencies
 To run this project you must have [Elixir](http://elixir-lang.org/install.html) and [Mix](http://elixir-lang.org/getting-started/mix-otp/introduction-to-mix.html) installed on your machine.
