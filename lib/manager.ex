@@ -1,5 +1,5 @@
 defmodule Manager do
-  def start(num_producers, num_consumers) do
+  def start(producers: num_producers, consumers: num_consumers, buffer_size: buffer_size) do
     Enum.map(1..num_consumers, fn _ -> Consumer.start(self) end)
     Enum.each(1..num_producers, fn _ -> Producer.start(self) end)
     loop([], [])

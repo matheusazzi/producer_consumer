@@ -26,5 +26,5 @@ iex -S mix
 Then to start you need to pass a number of producers and consumers:
 
 ```elixir
-Manager.start(3, 4) # 3 producers / 4 consumers
+Manager.start(producers: 3, consumers: 4, buffer_size: 5)
 ```
