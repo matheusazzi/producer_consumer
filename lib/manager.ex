@@ -5,31 +5,31 @@ defmodule Manager do
     loop([], [])
   end
 
-  defp loop(beers, free_consumers) do
+  defp loop(beers, waiting_consumers) do
     receive do
       {:request, consumer_pid} ->
         IO.puts "[M] Consumidor #{inspect consumer_pid} pediu uma cerveja."
-        send_beer(beers, consumer_pid, free_consumers)
+        send_beer(beers, consumer_pid, waiting_consumers)
 
       {:beer, beer, producer_pid} ->
         IO.puts "[M] Cerveja ##{beer} recebida do produtor #{inspect producer_pid}."
-        receive_beer(beers, {:beer, beer, producer_pid}, free_consumers)
+        receive_beer(beers, {:beer, beer, producer_pid}, waiting_consumers)
     end
   end
 
-  defp send_beer([], consumer_pid, free_consumers) do
+  defp send_beer([], consumer_pid, waiting_consumers) do
     IO.puts "[M] Sem cervejas na fila. Consumidor #{inspect consumer_pid} vai esperar próxima."
     print_beers_list([])
-    loop([], free_consumers ++ [consumer_pid])
+    loop([], waiting_consumers ++ [consumer_pid])
   end
 
-  defp send_beer(beers, consumer_pid, free_consumers) do
+  defp send_beer(beers, consumer_pid, waiting_consumers) do
     first_beer = hd(beers)
     IO.puts "[M] Cerveja ##{elem(first_beer, 1)} enviada ao consumidor #{inspect consumer_pid}."
     send(consumer_pid, first_beer)
 
     print_beers_list(tl(beers))
-    loop(tl(beers), free_consumers)
+    loop(tl(beers), waiting_consumers)
   end
 
   defp receive_beer(beers, beer, []) do
@@ -39,8 +39,8 @@ defmodule Manager do
     loop(beers, [])
   end
 
-  defp receive_beer(beers, beer, free_consumers) do
-    send_beer(beers ++ [beer], hd(free_consumers), tl(free_consumers))
+  defp receive_beer(beers, beer, waiting_consumers) do
+    send_beer(beers ++ [beer], hd(waiting_consumers), tl(waiting_consumers))
   end
 
   defp print_beers_list(beers) do
