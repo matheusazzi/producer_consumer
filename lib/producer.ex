@@ -1,4 +1,15 @@
 defmodule Producer do
+  @moduledoc """
+    Producers can produce beers through `produce/1` private method.
+    To start a Producer you must pass a manager PID.
+
+    The `Producer.start/1` method will spawn a new proccess.
+
+  ## Examples
+
+      iex> Producer.start(manager_pid)
+  """
+
   def start(manager_pid) do
     spawn(fn -> produce(manager_pid) end)
   end
@@ -9,6 +20,8 @@ defmodule Producer do
     produce(manager_pid)
   end
 
+  # Randomizes a number and uses it as the time to produce the beer.
+  # Returns the beer (a number). e.g. #=> 1999
   defp make_beer do
     beer = round(:rand.uniform * 1000) + 1000
     IO.puts "[P] Produtor #{inspect self} está fazendo cerveja."

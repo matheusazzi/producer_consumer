@@ -18,9 +18,7 @@ defmodule Manager do
     loop([], [], buffer_size)
   end
 
-  @doc """
-  Will wait messages from Producers and/or Consumers
-  """
+  # Will wait messages from Producers and/or Consumers
   defp loop(beers, waiting_consumers, buffer_size) do
     receive do
       {:request, consumer_pid} ->
@@ -75,15 +73,12 @@ defmodule Manager do
     loop(beers, waiting_consumers, buffer_size)
   end
 
-  @doc """
-  Prints the beers list in a pretty formatted way.
-
-  Returns `:ok`.
-
-  ## Examples
-
-      iex> print_beers_list([{:beer, 100, pid1}, {:beer, 400, pid2}], 5)
-  """
+  # Prints the beers list in a pretty formatted way.
+  #
+  # ## Examples
+  #
+  #    iex> print_beers_list([{:beer, 100, pid1}, {:beer, 400, pid2}], 5)
+  #
   defp print_beers_list(beers, buffer_size) do
     printable_list = Enum.map(beers, fn(beer) -> elem(beer, 1) end)
     IO.puts ['Cervejas: ', inspect(printable_list, char_lists: :as_lists), " Qtd: #{length(beers)}/#{buffer_size}"]
