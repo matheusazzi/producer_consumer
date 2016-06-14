@@ -44,13 +44,12 @@ defmodule Manager do
   end
 
   # Has beers
-  defp send_beer(beers, consumer_pid, waiting_consumers, buffer_size) do
-    first_beer = hd(beers)
-    IO.puts "[M] Cerveja ##{elem(first_beer, 1)} enviada ao consumidor #{inspect consumer_pid}."
-    send(consumer_pid, first_beer)
+  defp send_beer([head_beer | tail_beers], consumer_pid, waiting_consumers, buffer_size) do
+    IO.puts "[M] Cerveja ##{elem(head_beer, 1)} enviada ao consumidor #{inspect consumer_pid}."
+    send(consumer_pid, head_beer)
 
-    print_beers_list(tl(beers), buffer_size)
-    loop(tl(beers), waiting_consumers, buffer_size)
+    print_beers_list(tail_beers, buffer_size)
+    loop(tail_beers, waiting_consumers, buffer_size)
   end
 
   # No waiting consumers
@@ -62,8 +61,8 @@ defmodule Manager do
   end
 
   # There are waiting consumers
-  defp receive_beer(beers, beer, waiting_consumers, buffer_size) do
-    send_beer(beers ++ [beer], hd(waiting_consumers), tl(waiting_consumers), buffer_size)
+  defp receive_beer(beers, beer, [head_consumer | tail_consumers], buffer_size) do
+    send_beer(beers ++ [beer], head_consumer, tail_consumers, buffer_size)
   end
 
   # Buffer is full

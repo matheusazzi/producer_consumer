@@ -22,7 +22,7 @@ defmodule Consumer do
   # ## Examples
   #
   #    iex> send(consumer_pid, {:beer, 999, producer_pid})
-  defp consume( manager_pid) do
+  defp consume(manager_pid) do
     IO.puts "[C] Consumidor #{inspect self} está disponível."
     send(manager_pid, {:request, self})
 
