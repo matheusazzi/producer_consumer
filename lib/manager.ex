@@ -1,17 +1,16 @@
 defmodule Manager do
   @moduledoc """
     Manager module is a way to start and connect producers and consumers.
-    Provides `Manager.start/3` as a public method to initiaze the manager.
+    Provides `Manager.start/3` as a public function to initiaze the manager.
+
+    The `Manager.start/3` function will initializes a number of producers and consumers calling their `start` function too.
+    Also, it will call `Manager.loop/3` private function with an empty initial state and the buffer size.
+
+    ## Examples
+
+        iex> Manager.start(producers: 3, consumers: 4, buffer_size: 5)
   """
 
-  @doc """
-  It initializes a number of producers and consumers calling their start method.
-  Assigns the buffer limit size and call `Manager.loop/3` private method with an empty initial state.
-
-  ## Examples
-
-      iex> Manager.start(producers: 3, consumers: 4, buffer_size: 5)
-  """
   def start(producers: num_producers, consumers: num_consumers, buffer_size: buffer_size) do
     Enum.map(1..num_consumers, fn _ -> Consumer.start(self) end)
     Enum.map(1..num_producers, fn _ -> Producer.start(self) end)
@@ -75,9 +74,8 @@ defmodule Manager do
   # Prints the beers list in a pretty formatted way.
   #
   # ## Examples
-  #
   #    iex> print_beers_list([{:beer, 100, pid1}, {:beer, 400, pid2}], 5)
-  #
+  #    > "Cervejas: [100, 400] Qtd: 2/5"
   defp print_beers_list(beers, buffer_size) do
     printable_list = Enum.map(beers, fn(beer) -> elem(beer, 1) end)
     IO.puts ['Cervejas: ', inspect(printable_list, char_lists: :as_lists), " Qtd: #{length(beers)}/#{buffer_size}"]
