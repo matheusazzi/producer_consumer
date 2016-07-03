@@ -24,9 +24,9 @@ defmodule Producer do
   # Returns the beer (a number). e.g. #=> 1999
   defp make_beer do
     beer = round(:rand.uniform * 1000) + 1000
-    IO.puts "[P] Produtor #{inspect self} está fazendo cerveja."
+    IO.puts "[P] Producer #{inspect self} is making a beer."
     :timer.sleep(beer)
-    IO.puts "[P] Produtor #{inspect self} terminou uma cerveja (##{beer})."
+    IO.puts "[P] Producer #{inspect self} finished a beer (##{beer})."
     beer
   end
 end

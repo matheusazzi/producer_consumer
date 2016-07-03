@@ -23,14 +23,14 @@ defmodule Consumer do
   #
   #    iex> send(consumer_pid, {:beer, 999, producer_pid})
   defp consume(manager_pid) do
-    IO.puts "[C] Consumidor #{inspect self} está disponível."
+    IO.puts "[C] Consumer #{inspect self} is available."
     send(manager_pid, {:request, self})
 
     receive do
       {:beer, beer, producer_pid} ->
-        IO.puts "[C] Consumidor #{inspect self} consumindo cerveja ##{beer} do Produtor #{inspect producer_pid}."
+        IO.puts "[C] Consumer #{inspect self} is drinking a beer ##{beer} from producer #{inspect producer_pid}."
         :timer.sleep(beer)
-        IO.puts "[C] Consumidor #{inspect self} consumiu cerveja."
+        IO.puts "[C] Consumer #{inspect self} drank beer."
         consume(manager_pid)
     end
   end

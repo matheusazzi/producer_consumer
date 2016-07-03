@@ -21,11 +21,11 @@ defmodule Manager do
   defp loop(beers, waiting_consumers, buffer_size) do
     receive do
       {:request, consumer_pid} ->
-        IO.puts "[M] Consumidor #{inspect consumer_pid} pediu uma cerveja."
+        IO.puts "[M] Consumer #{inspect consumer_pid} asked for a beer."
         send_beer(beers, consumer_pid, waiting_consumers, buffer_size)
 
       {:beer, beer, producer_pid} ->
-        IO.puts "[M] Cerveja ##{beer} recebida do produtor #{inspect producer_pid}."
+        IO.puts "[M] Beer ##{beer} received from producer #{inspect producer_pid}."
 
         if length(beers) >= buffer_size do
           list_is_full(beers, beer, waiting_consumers, buffer_size)
@@ -37,14 +37,14 @@ defmodule Manager do
 
   # No beers
   defp send_beer([], consumer_pid, waiting_consumers, buffer_size) do
-    IO.puts "[M] Sem cervejas na fila. Consumidor #{inspect consumer_pid} vai esperar próxima."
+    IO.puts "[M] No beers in the queue. Consumer #{inspect consumer_pid} will wait for next."
     print_beers_list([], buffer_size)
     loop([], waiting_consumers ++ [consumer_pid], buffer_size)
   end
 
   # Has beers
   defp send_beer([head_beer | tail_beers], consumer_pid, waiting_consumers, buffer_size) do
-    IO.puts "[M] Cerveja ##{elem(head_beer, 1)} enviada ao consumidor #{inspect consumer_pid}."
+    IO.puts "[M] Beer ##{elem(head_beer, 1)} sent to consumer #{inspect consumer_pid}."
     send(consumer_pid, head_beer)
 
     print_beers_list(tail_beers, buffer_size)
@@ -54,7 +54,7 @@ defmodule Manager do
   # No waiting consumers
   defp receive_beer(beers, beer, [], buffer_size) do
     beers = beers ++ [beer]
-    IO.puts "[M] Cerveja ##{elem(beer, 1)} colocada na fila."
+    IO.puts "[M] Beer ##{elem(beer, 1)} queued."
     print_beers_list(beers, buffer_size)
     loop(beers, [], buffer_size)
   end
@@ -66,7 +66,7 @@ defmodule Manager do
 
   # Buffer is full
   defp list_is_full(beers, beer, waiting_consumers, buffer_size) do
-    IO.puts "[M] Fila de cervejas já está cheia. Cerveja ##{beer} descartada."
+    IO.puts "[M] Beers queue is full. Beer ##{beer} was discarded."
     print_beers_list(beers, buffer_size)
     loop(beers, waiting_consumers, buffer_size)
   end
@@ -75,9 +75,9 @@ defmodule Manager do
   #
   # ## Examples
   #    iex> print_beers_list([{:beer, 100, pid1}, {:beer, 400, pid2}], 5)
-  #    > "Cervejas: [100, 400] Qtd: 2/5"
+  #    > "Beers: [100, 400] Qtd: 2/5"
   defp print_beers_list(beers, buffer_size) do
     printable_list = Enum.map(beers, fn(beer) -> elem(beer, 1) end)
-    IO.puts ['Cervejas: ', inspect(printable_list, char_lists: :as_lists), " Qtd: #{length(beers)}/#{buffer_size}"]
+    IO.puts ['Beers: ', inspect(printable_list, char_lists: :as_lists), " Qtd: #{length(beers)}/#{buffer_size}"]
   end
 end
